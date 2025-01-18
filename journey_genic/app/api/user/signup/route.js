@@ -4,7 +4,7 @@ import User from "@/models/user.models";
 import databaseConnection from "@/database/connectionDb";
 
 //register user
-export async function POST(req: Request) {
+export async function POST(req) {
     try {
         await databaseConnection();
         const body = await req.json();

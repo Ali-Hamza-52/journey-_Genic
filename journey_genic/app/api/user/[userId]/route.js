@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 
 //GET Single User
 export async function GET(
-    request: Request,
-    { params }: { params: { userId: String } }) {
+    request,
+    { params }) {
     try {
         await databaseConnection();
         const user = await User.findById(params.userId);
@@ -34,7 +34,7 @@ export async function GET(
 
 // update User
 
-export async function PUT(request: Request, { params }: { params: { userId: String } }) {
+export async function PUT(request, { params }) {
     try {
         await databaseConnection();
         const body = await request.json();
@@ -77,7 +77,7 @@ export async function PUT(request: Request, { params }: { params: { userId: Stri
 
 // delete User
 
-export async function DELETE(request: Request, { params }: { params: { userId: String } }) {
+export async function DELETE(request, { params }) {
     try {
         await databaseConnection();
         const user = await User.findByIdAndDelete(params.userId);

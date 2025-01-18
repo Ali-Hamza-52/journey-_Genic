@@ -5,7 +5,7 @@ import databaseConnection from "@/database/connectionDb";
 import { generateToken } from "@/services/generateToken";
 import { cookies } from 'next/headers';
 // Login user
-export async function POST(request: Request) {
+export async function POST(request) {
     try {
         
         // Connect to the database
