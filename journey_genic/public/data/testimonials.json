@@ -1,0 +1,84 @@
+{
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Mehreen Ahmed",
+        "rating": 5,
+        "role": "Travel Enthusiast",
+        "comment": "Absolutely amazing experience! The team at JOURNY_GENIC made our family trip to Turkey unforgettable. Their attention to detail and personalized service exceeded all expectations.",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 2,
+        "name": "Ali Hamza",
+        "rating": 5,
+        "role": "Adventure Seeker",
+        "comment": "Best travel planning service I've ever used. Their knowledge of off-beat destinations and adventure activities is outstanding. Made my trek to Nepal absolutely perfect!",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 3,
+        "name": "Ayesha Khan",
+        "rating": 5,
+        "role": "Solo Traveler",
+        "comment": "As a solo female traveler, safety was my priority. JOURNY_GENIC ensured I had the most secure yet exciting experience exploring Southeast Asia. Highly recommended!",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 4,
+        "name": "Hassan Ali",
+        "rating": 4,
+        "role": "Business Traveler",
+        "comment": "Their business travel arrangements are top-notch. Seamless bookings, great hotel choices, and excellent support for last-minute changes. Makes business travel stress-free.",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 5,
+        "name": "Fatima Zahra",
+        "rating": 5,
+        "role": "Honeymoon Planner",
+        "comment": "Planned our entire honeymoon through them. The romantic touches and special arrangements they added made our Maldives trip magical!",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 6,
+        "name": "Usman Khan",
+        "rating": 5,
+        "role": "Family Vacationer",
+        "comment": "Perfect family vacation planners! They considered everyone's interests, from my teenage kids to my elderly parents. Our Europe trip was a hit with everyone.",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 7,
+        "name": "Zainab Malik",
+        "rating": 5,
+        "role": "Culture Explorer",
+        "comment": "Their cultural tours are exceptional. The local guides they arranged in Japan were knowledgeable and friendly. Got to experience authentic local culture!",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 8,
+        "name": "Ibrahim Shah",
+        "rating": 4,
+        "role": "Budget Traveler",
+        "comment": "Great options for budget travelers without compromising on experience quality. Their Thailand package was perfectly balanced and affordable.",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 9,
+        "name": "Amina Syed",
+        "rating": 5,
+        "role": "Luxury Traveler",
+        "comment": "The luxury experiences they arranged in Dubai were outstanding. Every detail was perfect, from private transfers to exclusive desert safaris.",
+        "avatar": "/images/user.png"
+      },
+      {
+        "id": 10,
+        "name": "Saad Ahmed",
+        "rating": 5,
+        "role": "Photography Enthusiast",
+        "comment": "Their photography tours are a dream! They knew exactly where to take us in Iceland for the best shots. A photographer's paradise!",
+        "avatar": "/images/user.png"
+      }
+    ]
+  }

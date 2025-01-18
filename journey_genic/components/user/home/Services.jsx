@@ -1,59 +1,74 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { 
-  Compass, 
-  Shield, 
-  Map, 
-  HeadsetHelp 
-} from 'lucide-react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Mountain, Landmark, Sun, Waves, TreePine, Building, Snowflake, PawPrint, Ship } from "lucide-react";
+import Image from "next/image";
 
 const iconMap = {
-  Compass: Compass,
-  Shield: Shield,
-  Map: Map,
-  HeadsetHelp: HeadsetHelp,
+  Mountain: Mountain,
+  Landmark: Landmark,
+  Sun: Sun,
+  Waves: Waves,
+  TreePine: TreePine,
+  Building: Building,
+  Snowflake: Snowflake,
+  PawPrint: PawPrint,
+  Ship: Ship,
 };
 
-export default function Services() {
+const Services = () => {
   const [services, setServices] = useState([]);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      const response = await import('@/public/data/services.json');
-      setServices(response.services);
-    };
-    fetchServices();
+    fetch("/data/services.json") // Ensure services.json is inside /public/data/
+      .then((response) => response.json())
+      .then((data) => setServices(data))
+      .catch((error) => console.error("Error loading services:", error));
   }, []);
 
+  // Auto-scroll logic
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        carouselRef.current.scrollBy({ left: 300, behavior: "smooth" }); // Adjust scroll distance
+      }
+    }, 3000); // Change every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [services]); // Re-run when services load
+
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12">
-          Why Should You Choose Us
-        </h2>
-        
-        <Carousel className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto mt-10 p-4">
+      <h2 className="text-3xl font-bold text-center mb-5">🌍 Our Tour Services</h2>
+      {services.length > 0 ? (
+        <Carousel ref={carouselRef}>
           <CarouselContent>
             {services.map((service) => {
-              const IconComponent = iconMap[service.icon];
+              const IconComponent = iconMap[service.icon] || Mountain; // Default icon
               return (
-                <CarouselItem key={service.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-6">
-                    <div className="bg-white rounded-lg shadow-lg p-6 h-full">
-                      <div className="flex items-center justify-center w-12 h-12 bg-teal-100 rounded-full mb-4">
-                        {/* <IconComponent className="w-6 h-6 text-teal-600" /> */}
+                <CarouselItem key={service.id} className="p-4">
+                  <Card className="shadow-lg border border-gray-200 hover:shadow-xl transition">
+                    <CardHeader className="flex">
+                      <IconComponent className="w-12 h-12 text-blue-500" />
+                      <div className="py-3 px-1">
+                        <CardTitle>{service.title}</CardTitle>
+                        <CardDescription>{service.description}</CardDescription>
                       </div>
-                      <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                      <p className="text-gray-600">{service.description}</p>
-                    </div>
-                  </div>
+                    </CardHeader>
+                    <CardContent>
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        className="w-full h-64 object-cover rounded-lg"
+                        height={1000}
+                        width={1000}
+                        quality={100}
+                      />
+                    </CardContent>
+                  </Card>
                 </CarouselItem>
               );
             })}
@@ -61,7 +76,11 @@ export default function Services() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-      </div>
-    </section>
+      ) : (
+        <p className="text-center text-gray-500">Loading services...</p>
+      )}
+    </div>
   );
-}
+};
+
+export default Services;

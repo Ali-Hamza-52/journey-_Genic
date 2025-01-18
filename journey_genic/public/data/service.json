@@ -1,0 +1,28 @@
+{
+    "services": [
+      {
+        "id": 1,
+        "title": "Expert Guidance",
+        "description": "Our team brings extensive knowledge and experience in the travel industry",
+        "icon": "Compass"
+      },
+      {
+        "id": 2,
+        "title": "Safety and Support",
+        "description": "24/7 support via chat, email, or phone, along with features like travel insurance, verified reviews, and our 'Safe stays' seal for a carefree experience",
+        "icon": "Shield"
+      },
+      {
+        "id": 3,
+        "title": "Discover Range of Destinations",
+        "description": "Explore a rich array of destinations, from exotic beaches to bustling cities and serene mountains. Discover unique cultures, breathtaking landscapes, and endless adventures tailored to your travel dreams",
+        "icon": "Map"
+      },
+      {
+        "id": 4,
+        "title": "24/7 Customer Support",
+        "description": "Travel whenever with 24/7 customer service to assist users anytime. Whether it's booking help, itinerary changes, or travel guides, support is available via chat, email, or phone",
+        "icon": "HeadsetHelp"
+      }
+    ]
+  }

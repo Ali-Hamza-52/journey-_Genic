@@ -2,17 +2,18 @@ import React from 'react'
 import Hero from './Hero'
 import Services from './Services'
 import FAQ from './Faq'
-import Chat from '../chat/Chat'
+import Testimonial from './Testimonial'
+import Service from './Service'
 
 const Home = () => {
   return (
-    <div>
+    <>
         <Hero/>
         <Services/>
+        <Service/>
         <FAQ/>
-        <Chat/>
-      
-    </div>
+        <Testimonial/>    
+    </>
   )
 }
 
