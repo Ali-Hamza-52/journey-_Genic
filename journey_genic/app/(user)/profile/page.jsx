@@ -1,11 +1,8 @@
+import UserProfile from '@/components/common/UserProfile'
 import React from 'react'
 
 const Page = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <UserProfile/>
 }
 
 export default Page
