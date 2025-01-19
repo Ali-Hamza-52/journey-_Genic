@@ -4,9 +4,6 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
 // Generate JWT
-export const generateToken = (payload:{
-    userId: string,
-    role: string
-}) => {
+export const generateToken = (payload) => {
     return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import MainSectionWrapper from "./MainSectionWrapper";
+import SectionWrapper from "./SectionWrapper";
 import { Typography } from "../ui/typography";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema } from "@/helpers/schemas/contact.schema";
 import Swal from "sweetalert2";
 import axiosInstance from "@/lib/axiosInstance";
-import { Spinner } from "../ui/spinner"; 
+import { Spinner } from "../ui/spinner";
 
 const ContactUs = () => {
   //loading state
@@ -19,7 +19,7 @@ const ContactUs = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ContactFormValues>({
+  } = useForm({
     resolver: zodResolver(contactSchema),
   });
   const sendMailToMe = async (formdata) => {
@@ -64,7 +64,7 @@ const ContactUs = () => {
   };
 
   return (
-    <MainSectionWrapper>
+    <SectionWrapper>
       <div className="flex flex-col gap-5 py-6 justify-center items-center">
         <Typography variant="h3" weight="bold">
           Get In Touch
@@ -85,7 +85,7 @@ const ContactUs = () => {
               Address
             </Typography>
             <Typography className="text-[#6a63ea] group-hover:text-white transition-colors duration-1000">
-              Madina Garden Barkey Burewala
+              Lala Zar Burewala
             </Typography>
           </div>
 
@@ -99,7 +99,7 @@ const ContactUs = () => {
               Contact
             </Typography>
             <Typography className="text-[#6a63ea] group-hover:text-white transition-colors duration-1000">
-              +923063099643
+            +92 317 6521722
             </Typography>
           </div>
 
@@ -113,7 +113,7 @@ const ContactUs = () => {
               Email
             </Typography>
             <Typography className="text-[#6a63ea] group-hover:text-white transition-colors duration-1000">
-              alihamzabrw52@gmail.com
+            finalyearproject800@gmail.com
             </Typography>
           </div>
         </div>
@@ -145,9 +145,8 @@ const ContactUs = () => {
                 {...register("name")}
                 type="text"
                 placeholder="Your Name"
-                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${errors.name ? "border-red-500" : "border-gray-300"
+                  }`}
               />
               {errors.name && (
                 <p className="text-red-500 text-sm mt-1">
@@ -160,9 +159,8 @@ const ContactUs = () => {
                 {...register("email")}
                 type="email"
                 placeholder="Your Email"
-                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${errors.email ? "border-red-500" : "border-gray-300"
+                  }`}
               />
               {errors.email && (
                 <p className="text-red-500 text-sm mt-1">
@@ -175,9 +173,8 @@ const ContactUs = () => {
                 {...register("subject")}
                 type="text"
                 placeholder="Your Subject"
-                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${
-                  errors.subject ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full py-3 px-4 rounded-sm focus:outline-blue-700 focus-visible:outline-blue-700 shadow-2xl ${errors.subject ? "border-red-500" : "border-gray-300"
+                  }`}
               />
               {errors.subject && (
                 <p className="text-red-500 text-sm mt-1">
@@ -189,9 +186,8 @@ const ContactUs = () => {
               <textarea
                 {...register("message")}
                 placeholder="Your Message"
-                className={`w-full h-36 py-3 px-4 rounded-md focus:outrounded-smne-none resize-none focus-visible:outline-blue-700 shadow-2xl ${
-                  errors.message ? "border-red-500" : "border-gray-300"
-                }`}
+                className={`w-full h-36 py-3 px-4 rounded-md focus:outrounded-smne-none resize-none focus-visible:outline-blue-700 shadow-2xl ${errors.message ? "border-red-500" : "border-gray-300"
+                  }`}
               />
               {errors.message && (
                 <p className="text-red-500 text-sm mt-1">
@@ -209,7 +205,7 @@ const ContactUs = () => {
           </form>
         </div>
       </div>
-    </MainSectionWrapper>
+    </SectionWrapper>
   );
 };
 

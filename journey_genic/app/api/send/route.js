@@ -9,7 +9,7 @@ export async function POST(req) {
 
     const { error } = await resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
-      to: "alihamzabrw52@gmail.com",
+      to: "finalyearproject800@gmail.com",
       subject: requestData.subject,
       html: `
      <div
@@ -22,7 +22,7 @@ export async function POST(req) {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   "
 >
-  <h2 style="color: #664bff; margin-bottom: 20px">Hi, Ali Hamza</h2>
+  <h2 style="color: #664bff; margin-bottom: 20px">Hi, Mehreen</h2>
   <div style="margin-bottom: 20px">
     <label style="display: block; margin-bottom: 10px; color: #3a2525"
       >Received Message From:</label

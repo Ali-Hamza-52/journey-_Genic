@@ -28,14 +28,10 @@ const userSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
     },
-    isSocialLogin: {
-        type: Boolean,
-        default: false
-    },
     role: {
         type: String,
-        enum: ['customer', 'admin', 'vendor'],
-        default: 'customer'
+        enum: ['client', 'admin'],
+        default: 'client'
     }
 },
     { timestamps: true }

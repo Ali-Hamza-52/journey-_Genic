@@ -1,6 +1,6 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import MainSectionWrapper from "../common/MainSectionWrapper";
+import React, { useState } from "react";
+import SectionWrapper from "../common/SectionWrapper";
 import {
   CircleUser,
   House,
@@ -11,81 +11,80 @@ import {
   ScanFace,
   UserPen,
 } from "lucide-react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import signUpSchema from "@/helpers/schemas/signup";
-import { SignUpFormValues } from "@/helpers/types/signup";
 import { useForm } from "react-hook-form";
-
 import Link from "next/link";
-import SocialLogins from "./SocialLogins";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
-import {
-  selectIsSignupLoading,
-  selectIsSignupError,
-  selectIsUserSignupSuccess,
-} from "@/lib/store/features/user/selectors";
-import { signupUser } from "@/lib/store/features/user/thunk";
 import { useRouter } from "next/navigation";
 import { Spinner } from "../ui/spinner";
-import useToast from "@/hooks/useToast";
-
+import { toast } from "sonner"
+import axiosInstance from "@/lib/axiosInstance";
 const Signup = () => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const toast = useToast();
-  // Selecting Redux state
-  const isSignupLoading = useAppSelector(selectIsSignupLoading);
-  const isSignupSuccess = useAppSelector(selectIsUserSignupSuccess);
-  const isSignupError = useAppSelector(selectIsSignupError);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpFormValues>({
+  } = useForm({
     mode: "onChange",
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       isTermsAndConditions: false,
-      role: "customer",
-      isSocialLogin: false,
+      role: "client",
       profileImage: undefined,
     },
   });
 
-  const submitData = (data: SignUpFormValues): void => {
-    console.log("Submitted Data:", data);
-    if (data) {
-      dispatch(signupUser(data));
+  // Handle form submission
+  const submitData = async (data) => {
+    setIsLoading(true);
+    setIsError(false); // Reset error state
+
+    try {
+      const response = await axiosInstance.post("/user/signup", data); // API call
+
+      console.log("response --->",response)
+      // Display success toast
+      if(response.status === 200){
+
+        toast.success("Signup successful!");
+        router.push("/login"); // Redirect to login after successful signup
+      }
+      
+      if(response.status === 400){
+        toast.warning(response.message);
+      }
+    } catch (error) {
+      setIsError(true);
+      setErrorMessage("An error occurred");
+      toast.error(errorMessage); 
+    } finally {
+      setIsLoading(false); // Set loading state to false after API call
     }
   };
 
-  useEffect(() => {
-    if (isSignupSuccess) {
-      router.push("/login");
-    }
-  }, [isSignupSuccess]);
-
   return (
-    <MainSectionWrapper>
-      <div className="max-w-lg bg-neutral200 px-6 sm:px-16 py-8 shadow-2xl rounded-2xl mx-auto flex flex-col justify-center items-center gap-3 overflow-hidden">
+    <SectionWrapper>
+      <div className="max-w-lg bg-gray-800 px-6 sm:px-16 py-8 shadow-2xl rounded-2xl mx-auto flex flex-col justify-center items-center gap-3 overflow-hidden">
         <ScanFace size={48} color="white" />
         {/* Form Inputs */}
         <form onSubmit={handleSubmit(submitData)}>
           {/* Name Field */}
           <div className="flex flex-col gap-2 py-2">
             <Label
-              className={`${
-                errors.username ? "text-red-500" : "text-neutral700"
-              }`}
+              className={`${errors.username ? "text-red-500" : "text-gray-400"}`}
             >
               Your Name
             </Label>
-            <div className="relative w-72 sm:min-w-96 ">
+            <div className="relative w-72 sm:min-w-96">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-textPrimary">
                 <UserPen size={16} />
               </div>
@@ -94,28 +93,24 @@ const Signup = () => {
                 type="text"
                 placeholder="Please Enter Your Name"
                 {...register("username")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
-                  errors.username
-                    ? "ring-1 ring-red-500 focus-visible:ring-red-500"
-                    : "focus-visible:ring-surfaceBrand"
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                  errors.username ? "ring-1 ring-red-500 focus-visible:ring-red-500" : "focus-visible:ring-surfaceBrand"
                 }`}
               />
             </div>
             {errors.username && (
-              <p className="text-red-500 overflow-hidden">
-                {errors.username.message}
-              </p>
+              <p className="text-red-500 overflow-hidden">{errors.username.message}</p>
             )}
           </div>
 
           {/* Email Field */}
           <div className="flex flex-col gap-2 py-2">
             <Label
-              className={`${errors.email ? "text-red-500" : "text-neutral700"}`}
+              className={`${errors.email ? "text-red-500" : "text-gray-400"}`}
             >
               Email Address
             </Label>
-            <div className="relative w-72 sm:min-w-96 ">
+            <div className="relative w-72 sm:min-w-96">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-textPrimary">
                 <Mail size={16} />
               </div>
@@ -124,30 +119,24 @@ const Signup = () => {
                 type="email"
                 placeholder="your_email@example.com"
                 {...register("email")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
-                  errors.email
-                    ? "ring-1 ring-red-500 focus-visible:ring-red-500"
-                    : "focus-visible:ring-surfaceBrand"
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                  errors.email ? "ring-1 ring-red-500 focus-visible:ring-red-500" : "focus-visible:ring-surfaceBrand"
                 }`}
               />
             </div>
             {errors.email && (
-              <p className="text-red-500 overflow-hidden">
-                {errors.email.message}
-              </p>
+              <p className="text-red-500 overflow-hidden">{errors.email.message}</p>
             )}
           </div>
 
           {/* Password Field */}
           <div className="flex flex-col gap-2 py-2">
             <Label
-              className={`${
-                errors.password ? "text-red-500" : "text-neutral700"
-              }`}
+              className={`${errors.password ? "text-red-500" : "text-gray-400"}`}
             >
               Password
             </Label>
-            <div className="relative w-72 sm:min-w-96 ">
+            <div className="relative w-72 sm:min-w-96">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-textPrimary">
                 <KeyRound size={16} />
               </div>
@@ -156,30 +145,24 @@ const Signup = () => {
                 type="password"
                 placeholder="password"
                 {...register("password")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
-                  errors.password
-                    ? "ring-1 ring-red-500 focus-visible:ring-red-500"
-                    : "focus-visible:ring-surfaceBrand"
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                  errors.password ? "ring-1 ring-red-500 focus-visible:ring-red-500" : "focus-visible:ring-surfaceBrand"
                 }`}
               />
             </div>
             {errors.password && (
-              <p className="text-red-500 overflow-hidden">
-                {errors.password.message}
-              </p>
+              <p className="text-red-500 overflow-hidden">{errors.password.message}</p>
             )}
           </div>
 
           {/* Confirm Password Field */}
           <div className="flex flex-col gap-2 py-2">
             <Label
-              className={`${
-                errors.confirmPassword ? "text-red-500" : "text-neutral700"
-              }`}
+              className={`${errors.confirmPassword ? "text-red-500" : "text-gray-400"}`}
             >
               Confirm Password
             </Label>
-            <div className="relative w-72 sm:min-w-96 ">
+            <div className="relative w-72 sm:min-w-96">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-textPrimary">
                 <KeyRound size={16} />
               </div>
@@ -188,17 +171,13 @@ const Signup = () => {
                 type="password"
                 placeholder="Confirm Password"
                 {...register("confirmPassword")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
-                  errors.confirmPassword
-                    ? "ring-1 ring-red-500 focus-visible:ring-red-500"
-                    : "focus-visible:ring-surfaceBrand"
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                  errors.confirmPassword ? "ring-1 ring-red-500 focus-visible:ring-red-500" : "focus-visible:ring-surfaceBrand"
                 }`}
               />
             </div>
             {errors.confirmPassword && (
-              <p className="text-red-500 overflow-hidden">
-                {errors.confirmPassword.message}
-              </p>
+              <p className="text-red-500 overflow-hidden">{errors.confirmPassword.message}</p>
             )}
           </div>
 
@@ -206,7 +185,7 @@ const Signup = () => {
           <div className="flex flex-col gap-2 py-2">
             <Label
               className={`${
-                errors.phoneNumber ? "text-red-500" : "text-neutral700"
+                errors.phoneNumber ? "text-red-500" : "text-gray-400"
               }`}
             >
               Phone Number
@@ -220,7 +199,7 @@ const Signup = () => {
                 type="text"
                 placeholder="+92 (306) - 3099643"
                 {...register("phoneNumber")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
                   errors.phoneNumber
                     ? "ring-1 ring-red-500 focus-visible:ring-red-500"
                     : "focus-visible:ring-surfaceBrand"
@@ -238,7 +217,7 @@ const Signup = () => {
           <div className="flex flex-col gap-2 py-2">
             <Label
               className={`${
-                errors.address ? "text-red-500" : "text-neutral700"
+                errors.address ? "text-red-500" : "text-gray-400"
               }`}
             >
               Address
@@ -252,7 +231,7 @@ const Signup = () => {
                 type="text"
                 placeholder="Enter your address"
                 {...register("address")}
-                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 font-semibold text-neutral700 focus-visible:ring-1 focus-visible:ring-offset-0 ${
+                className={`w-full rounded-full border-none bg-surfaceOverlay px-10 py-3 text-gray-400 focus-visible:ring-1 focus-visible:ring-offset-0 ${
                   errors.address
                     ? "ring-1 ring-red-500 focus-visible:ring-red-500"
                     : "focus-visible:ring-surfaceBrand"
@@ -279,32 +258,30 @@ const Signup = () => {
             />
             <Label
               htmlFor="terms"
-              className={`${
-                errors.isTermsAndConditions ? "text-red-500" : "text-neutral700"
-              }`}
+              className={`${errors.isTermsAndConditions ? "text-red-500" : "text-gray-400"}`}
             >
               I agree to terms and conditions
             </Label>
           </div>
           {errors.isTermsAndConditions && (
-            <p className="text-red-500 overflow-hidden">
-              {errors.isTermsAndConditions.message}
-            </p>
+            <p className="text-red-500 overflow-hidden">{errors.isTermsAndConditions.message}</p>
           )}
 
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={isSignupLoading} // Disable button when loading
+            disabled={isLoading} // Disable button when loading
             className="mt-4 w-full rounded-full bg-surfaceBrand text-white py-2 font-semibold flex items-center"
           >
-            {isSignupLoading ? <Spinner /> : "Sign Up"}{" "}
-            {/* Show Spinner when loading */}
+            {isLoading ? <Spinner /> : "Sign Up"} {/* Show Spinner when loading */}
           </Button>
         </form>
 
         {/* Social Media Login */}
-        <SocialLogins isLoading={isSignupLoading} />
+        <div className="flex justify-center gap-4 mt-4">
+          {/* Add social login buttons */}
+        </div>
+
         <p className="text-white text-center mt-4">
           Already have an account?{" "}
           <Link
@@ -315,7 +292,7 @@ const Signup = () => {
           </Link>
         </p>
       </div>
-    </MainSectionWrapper>
+    </SectionWrapper>
   );
 };
 

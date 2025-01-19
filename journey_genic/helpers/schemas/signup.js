@@ -32,7 +32,6 @@ const signUpSchema = z
                 (value) => !value || (value.length >= 10 && value.length <= 15),
                 'Phone number must be between 10 and 15 digits.'
             ),
-        isSocialLogin: z.boolean(),
         role: z.string(),
         password: z
             .string()
