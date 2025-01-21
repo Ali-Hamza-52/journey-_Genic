@@ -54,9 +54,9 @@ export const OfferForm = ({ initialData = null }) => {
     console.log('i am submitting', data);
     try {
       setLoading(true);
-      
+
       if (!initialData) {
-        
+
         console.log('i am submitting', data);
         const response = await axiosInstance.post('/offer', data);
         console.log('response', response);
@@ -87,16 +87,27 @@ export const OfferForm = ({ initialData = null }) => {
 
     try {
       setIsEditing(true);
-      // Call the deleteImage function
       await firebaseDeleteImageHandler(imageToDelete);
 
-      // Update local state to remove the image
       const newImages = uploadedImages.filter((_, i) => i !== index);
       setUploadedImages(newImages);
-      setValue("images", newImages);
+      form.setValue("images", newImages);
       toast.success("Image deleted successfully");
-    } catch (error) {
+      if (initialData) {
+        try {
+          const response = await axiosInstance.put(`/offer/${initialData._id}`, { images: newImages });
+          if (response.status === 200) {
+            toast.success("Image deleted successfully from offer");
+          } else {
+            toast.error("Failed to delete image from offer");
+          }
+        } catch {
+          toast.error("Failed to delete image from offer");
+        }
+      }
+    } catch {
       toast.error("Failed to delete image");
+      setIsEditing(false);
     }
     setIsEditing(false);
   };
@@ -317,6 +328,10 @@ export const OfferForm = ({ initialData = null }) => {
               className="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-background file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
               accept="image/*"
             />
+            {errors.images && (
+              <p className="text-red-500 mt-1 text-sm">{errors.images.message}</p>
+            )}
+
 
             {isEditing && (
               <div className="flex items-center gap-2 text-muted-foreground">

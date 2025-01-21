@@ -105,16 +105,27 @@ export const DestinationForm = ({ initialData = null }) => {
 
         try {
             setIsEditing(true);
-            // Call the deleteImage function
             await firebaseDeleteImageHandler(imageToDelete);
 
-            // Update local state to remove the image
             const newImages = uploadedImages.filter((_, i) => i !== index);
             setUploadedImages(newImages);
-            setValue("images", newImages);
+            form.setValue("images", newImages);
             toast.success("Image deleted successfully");
-        } catch (error) {
+            if (initialData) {
+                try {
+                    const response = await axiosInstance.put(`/destination/${initialData._id}`, { images: newImages });
+                    if (response.status === 200) {
+                        toast.success("Image deleted successfully from destination");
+                    } else {
+                        toast.error("Failed to delete image from destination");
+                    }
+                } catch {
+                    toast.error("Failed to delete image from destination");
+                }
+            }
+        } catch {
             toast.error("Failed to delete image");
+            setIsEditing(false);
         }
         setIsEditing(false);
     };
@@ -240,6 +251,9 @@ export const DestinationForm = ({ initialData = null }) => {
                         className="block w-full text-sm border border-gray-300 rounded-sm cursor-pointer bg-background text-foreground"
                         accept="image/*"
                     />
+                    {errors.images && (
+                        <p className="text-red-500 mt-1 text-sm">{errors.images.message}</p>
+                    )}
                     <div className="mt-2">
                         {uploadedImages.length > 0 && (
                             <div className="grid grid-cols-3 gap-2">

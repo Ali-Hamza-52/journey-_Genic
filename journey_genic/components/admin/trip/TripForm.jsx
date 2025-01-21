@@ -12,6 +12,8 @@ import { Loader, Trash } from 'lucide-react';
 import TagInput from '@/components/common/TagInput';
 import { firebaseUploadImageHandler } from '@/services/firebaseImageUpload';
 import { Spinner } from '@/components/ui/spinner';
+import axiosInstance from '@/lib/axiosInstance';
+import { firebaseDeleteImageHandler } from '@/services/firebaseImageDelete';
 
 const tripSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -45,9 +47,12 @@ export const TripForm = ({ initialData = null }) => {
     try {
       setLoading(true);
 
+      console.log("trip ==", data)
+
       if (!initialData) {
 
         const response = await axiosInstance.post('/trip', data);
+        console.log("trip =r=", response)
         if (response.status === 200) {
           toast.success('Trip saved successfully!');
           setIsEditing(false);
@@ -63,6 +68,7 @@ export const TripForm = ({ initialData = null }) => {
 
     } catch (error) {
       setLoading(false);
+      console.log("trip =e=", error.message)
       toast.error('Failed to save trip');
     } finally {
       setLoading(false);
@@ -74,16 +80,27 @@ export const TripForm = ({ initialData = null }) => {
 
     try {
       setIsEditing(true);
-      // Call the deleteImage function
       await firebaseDeleteImageHandler(imageToDelete);
 
-      // Update local state to remove the image
       const newImages = uploadedImages.filter((_, i) => i !== index);
       setUploadedImages(newImages);
-      setValue("images", newImages);
+      form.setValue("images", newImages);
       toast.success("Image deleted successfully");
-    } catch (error) {
+      if (initialData) {
+        try {
+          const response = await axiosInstance.put(`/trip/${initialData._id}`, { images: newImages });
+          if (response.status === 200) {
+            toast.success("Image deleted successfully from trip");
+          } else {
+            toast.error("Failed to delete image from trip");
+          }
+        } catch {
+          toast.error("Failed to delete image from trip");
+        }
+      }
+    } catch {
       toast.error("Failed to delete image");
+      setIsEditing(false);
     }
     setIsEditing(false);
   };
@@ -221,6 +238,9 @@ export const TripForm = ({ initialData = null }) => {
             className="block w-full text-sm border border-gray-300 rounded-sm cursor-pointer bg-background text-foreground"
             accept="image/*"
           />
+          {errors.images && (
+            <p className="text-red-500 mt-1 text-sm">{errors.images.message}</p>
+          )}
           <div className="mt-2">
             {uploadedImages.length > 0 && (
               <div className="grid grid-cols-3 gap-2">
@@ -254,7 +274,7 @@ export const TripForm = ({ initialData = null }) => {
           </div>
         )}
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full flex items-center">
 
           {isLoading ? <Spinner /> : initialData ? 'Update Trip' : 'Create Trip'}
         </Button>

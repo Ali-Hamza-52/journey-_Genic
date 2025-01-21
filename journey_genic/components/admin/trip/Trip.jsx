@@ -23,23 +23,23 @@ export const Trip = () => {
     const [isLoading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isData, setData] = useState(true);
-    const [destinations, setDestinations] = useState([]);
+    const [trips, setTrips] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axiosInstance.get('/destination');
+                const response = await axiosInstance.get('/trip');
                 if (response.status === 200) {
                     if (response.data.length > 0) {
                         setData(true);
-                        setDestinations(response.data);
+                        setTrips(response.data);
                     } else {
                         setData(false);
                     }
                 }
             } catch (error) {
-                toast.error('Failed to fetch destinations');
+                toast.error('Failed to fetch trips');
                 setData(false);
                 setLoading(false);
             }
@@ -49,16 +49,16 @@ export const Trip = () => {
         fetchData();
     }, [])
 
-    const filteredDestinations = destinations.filter(dest =>
-        dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        dest.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        dest.city.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredTrips = trips.filter(trip =>
+        trip.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        trip.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        trip.city.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
-            text: 'This will delete the destination permanently.',
+            text: 'This will delete the trip permanently.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -67,16 +67,16 @@ export const Trip = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await axiosInstance.delete(`/destination/${id}`);
+                    const response = await axiosInstance.delete(`/trip/${id}`);
                     if (response.status === 200) {
-                        Swal.fire('Deleted!', 'Your destination has been deleted.', 'success').then((result) => {
-                            toast.success('Destination deleted successfully');
+                        Swal.fire('Deleted!', 'Your trip has been deleted.', 'success').then((result) => {
+                            toast.success('Trip deleted successfully');
                             window.location.reload();
                         })
-                        setDestinations(destinations.filter(destination => destination.id !== id));
+                        setTrips(trips.filter(trip => trip.id !== id));
                     }
                 } catch (error) {
-                    Swal.fire('Error!', 'There was an issue deleting the destination.', 'error');
+                    Swal.fire('Error!', 'There was an issue deleting the trip.', 'error');
                 }
             }
         });
@@ -101,7 +101,7 @@ export const Trip = () => {
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
                     <Input
-                        placeholder="Search destinations..."
+                        placeholder="Search trips..."
                         className="max-w-sm"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -110,38 +110,36 @@ export const Trip = () => {
                         <DialogTrigger asChild>
                             <Button className="flex items-center">
                                 <Plus className="mr-2 h-4 w-4" />
-                                Add Destination
+                                Add Trip
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                             <DialogHeader>
-                                <DialogTitle>Add New Destination</DialogTitle>
+                                <DialogTitle>Add New Trip</DialogTitle>
                             </DialogHeader>
                             <TripForm />
                         </DialogContent>
                     </Dialog>
                 </div>
 
-                {isData && filteredDestinations.length > 0 ? (
+                {isData && filteredTrips.length > 0 ? (
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Country</TableHead>
                                 <TableHead>City</TableHead>
-                                <TableHead>Price</TableHead>
                                 <TableHead>Tags</TableHead>
                                 <TableHead>Actions</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {filteredDestinations.map((destination, index) => (
+                            {filteredTrips.map((trip, index) => (
                                 <TableRow key={index}>
-                                    <TableCell>{destination.name}</TableCell>
-                                    <TableCell>{destination.country}</TableCell>
-                                    <TableCell>{destination.city}</TableCell>
-                                    <TableCell>${destination.price}</TableCell>
-                                    <TableCell>{destination.tags.join(', ')}</TableCell>
+                                    <TableCell>{trip.name}</TableCell>
+                                    <TableCell>{trip.country}</TableCell>
+                                    <TableCell>{trip.city}</TableCell>
+                                    <TableCell>{trip.tags.join(', ')}</TableCell>
                                     <TableCell className="space-x-2">
 
 
@@ -153,15 +151,15 @@ export const Trip = () => {
                                             </DialogTrigger>
                                             <DialogContent className="max-w-2xl">
                                                 <DialogHeader>
-                                                    <DialogTitle>Update Destination</DialogTitle>
+                                                    <DialogTitle>Update Trip</DialogTitle>
                                                 </DialogHeader>
-                                                <TripForm initialData={destination} />
+                                                <TripForm initialData={trip} />
                                             </DialogContent>
                                         </Dialog>
                                         <Button
                                             variant="destructive"
                                             size="sm"
-                                            onClick={() => handleDelete(destination._id)}  // Attach delete handler
+                                            onClick={() => handleDelete(trip._id)}  // Attach delete handler
                                         >
                                             <Trash className="h-4 w-4" />
                                         </Button>

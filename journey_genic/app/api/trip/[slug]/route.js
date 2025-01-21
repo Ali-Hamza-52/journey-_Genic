@@ -1,4 +1,4 @@
-import Trip from "@/models/trip";
+import Trip from "@/models/trip.models";
 import { NextResponse } from "next/server";
 import databaseConnection from "@/database/connectionDb";
 
