@@ -17,6 +17,7 @@ import AdminSectionWrapper from '@/components/common/AdminSectionWrapper';
 import { toast } from 'sonner';
 import axiosInstance from '@/lib/axiosInstance';
 import Swal from 'sweetalert2';  // Import SweetAlert2
+import { Typography } from '@/components/ui/typography';
 
 export const Trip = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -98,7 +99,10 @@ export const Trip = () => {
 
     return (
         <AdminSectionWrapper>
-            <div className="space-y-4">
+            <Typography weight='semiBold' variant='h4'>
+                Trips
+            </Typography>
+            <div className="space-y-4 mt-1">
                 <div className="flex justify-between items-center">
                     <Input
                         placeholder="Search trips..."

@@ -33,7 +33,6 @@ const offerSchema = new Schema(
       type: Number,
       required: true,
       min: [0, "Discount must be positive"],
-      max: [100, "Discount cannot exceed 100%"],
     },
     tags: {
       type: [String],

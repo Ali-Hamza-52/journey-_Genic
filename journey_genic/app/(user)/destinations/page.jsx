@@ -1,11 +1,8 @@
+import DestinationsGrid from '@/components/user/destination/Places'
 import React from 'react'
 
 const page = () => {
-  return (
-    <div>
-      desitnationalization
-    </div>
-  )
+  return <DestinationsGrid/>
 }
 
 export default page

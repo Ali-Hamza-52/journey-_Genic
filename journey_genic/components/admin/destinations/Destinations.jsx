@@ -141,6 +141,7 @@ import AdminSectionWrapper from '@/components/common/AdminSectionWrapper';
 import { toast } from 'sonner';
 import axiosInstance from '@/lib/axiosInstance';
 import Swal from 'sweetalert2';  // Import SweetAlert2
+import { Typography } from '@/components/ui/typography';
 
 export const DestinationsPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -222,7 +223,10 @@ export const DestinationsPage = () => {
 
     return (
         <AdminSectionWrapper>
-            <div className="space-y-4">
+            <Typography weight='semiBold' variant='h4'>
+                Destinations
+            </Typography>
+            <div className="space-y-4 mt-1">
                 <div className="flex justify-between items-center">
                     <Input
                         placeholder="Search destinations..."
@@ -264,7 +268,7 @@ export const DestinationsPage = () => {
                                     <TableCell>{destination.name}</TableCell>
                                     <TableCell>{destination.country}</TableCell>
                                     <TableCell>{destination.city}</TableCell>
-                                    <TableCell>${destination.price}</TableCell>
+                                    <TableCell>RS. {destination.price}</TableCell>
                                     <TableCell>{destination.tags.join(', ')}</TableCell>
                                     <TableCell className="space-x-2">
 

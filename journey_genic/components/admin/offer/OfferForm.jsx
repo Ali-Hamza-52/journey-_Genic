@@ -19,8 +19,8 @@ const offerSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   country: z.string().min(2, 'Country must be at least 2 characters'),
   city: z.string().min(2, 'City must be at least 2 characters'),
-  price: z.number().min(0, 'Price must be positive'),
-  discount: z.number().min(0, 'Discount must be positive').max(100, 'Discount cannot exceed 100%'),
+  price: z.number().min(0, 'Price must be positive').default(0),
+  discount: z.number().min(0, 'Discount must be positive').default(0),
   tags: z.array(z.string()).min(1, 'At least one tag is required'),
   facilities: z.array(z.string()).min(1, 'At least one facility is required'),
   images: z.array(z.string()).min(1, 'At least one image is required'),
@@ -233,6 +233,7 @@ export const OfferForm = ({ initialData = null }) => {
                     {...field}
                     onChange={e => field.onChange(parseFloat(e.target.value))}
                     placeholder="1500"
+                    min="0"
                   />
                 </FormControl>
                 <FormMessage />
@@ -252,7 +253,6 @@ export const OfferForm = ({ initialData = null }) => {
                     {...field}
                     onChange={e => field.onChange(parseFloat(e.target.value))}
                     min="0"
-                    max="100"
                     placeholder="20"
                   />
                 </FormControl>
@@ -328,8 +328,8 @@ export const OfferForm = ({ initialData = null }) => {
               className="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-background file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
               accept="image/*"
             />
-            {errors.images && (
-              <p className="text-red-500 mt-1 text-sm">{errors.images.message}</p>
+            {form.errors?.images && (
+              <p className="text-red-500 mt-1 text-sm">{form.errors.images.message}</p>
             )}
 
 

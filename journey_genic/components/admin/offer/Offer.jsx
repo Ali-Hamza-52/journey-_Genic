@@ -17,6 +17,7 @@ import AdminSectionWrapper from '@/components/common/AdminSectionWrapper';
 import { toast } from 'sonner';
 import axiosInstance from '@/lib/axiosInstance';
 import Swal from 'sweetalert2';  // Import SweetAlert2
+import { Typography } from '@/components/ui/typography';
 
 export const Offer = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -99,7 +100,10 @@ export const Offer = () => {
 
     return (
         <AdminSectionWrapper>
-            <div className="space-y-4">
+            <Typography weight='semiBold' variant='h4'>
+                            Offers
+            </Typography>
+            <div className="space-y-4 mt-1">
                 <div className="flex justify-between items-center">
                     <Input
                         placeholder="Search Offers..."
@@ -141,7 +145,7 @@ export const Offer = () => {
                                     <TableCell>{offer.name}</TableCell>
                                     <TableCell>{offer.country}</TableCell>
                                     <TableCell>{offer.city}</TableCell>
-                                    <TableCell>${offer.price}</TableCell>
+                                    <TableCell>RS. {offer.price}</TableCell>
                                     <TableCell>{offer.tags.join(', ')}</TableCell>
                                     <TableCell className="space-x-2">
 

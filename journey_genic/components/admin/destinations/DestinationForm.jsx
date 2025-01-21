@@ -251,8 +251,8 @@ export const DestinationForm = ({ initialData = null }) => {
                         className="block w-full text-sm border border-gray-300 rounded-sm cursor-pointer bg-background text-foreground"
                         accept="image/*"
                     />
-                    {errors.images && (
-                        <p className="text-red-500 mt-1 text-sm">{errors.images.message}</p>
+                    {form.errors?.images && (
+                        <p className="text-red-500 mt-1 text-sm">{form.errors.images.message}</p>
                     )}
                     <div className="mt-2">
                         {uploadedImages.length > 0 && (
