@@ -11,6 +11,9 @@ import { toast } from 'sonner';
 import { Loader, Trash } from 'lucide-react';
 import TagInput from '@/components/common/TagInput';
 import axiosInstance from '@/lib/axiosInstance';
+import { firebaseUploadImageHandler } from '@/services/firebaseImageUpload';
+import { firebaseDeleteImageHandler } from '@/services/firebaseImageDelete';
+import { Spinner } from '@/components/ui/spinner';
 
 const destinationSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -25,6 +28,7 @@ const destinationSchema = z.object({
 
 export const DestinationForm = ({ initialData = null }) => {
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [uploadedImages, setUploadedImages] = useState(initialData?.images || []);
 
     const form = useForm({
@@ -43,13 +47,29 @@ export const DestinationForm = ({ initialData = null }) => {
 
     const onSubmit = async (data) => {
         try {
-            const response = await axiosInstance.post('/destination', data);
-            if (response.status === 200){
-                toast.success('Destination saved successfully!');
-                setIsEditing(false);
+            setLoading(true);
+
+            if (!initialData) {
+
+                const response = await axiosInstance.post('/destination', data);
+                if (response.status === 200) {
+                    toast.success('Destination saved successfully!');
+                    setIsEditing(false);
+                }
+            } else {
+                const response = await axiosInstance.put(`/destination/${initialData._id}`, data);
+                if (response.status === 200) {
+                    toast.success('Destination updated successfully!');
+                    setIsEditing(false);
+                }
             }
+            window.location.reload();
+
         } catch (error) {
+            setLoading(false);
             toast.error('Failed to save destination');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -61,7 +81,7 @@ export const DestinationForm = ({ initialData = null }) => {
             for (const file of Array.from(files)) {
                 try {
                     setIsEditing(true);
-                    const url = await uploadImageHandler(file);
+                    const url = await firebaseUploadImageHandler(file);
                     if (typeof url === "string") {
                         urls.push(url);
                         toast.success("Image uploaded successfully");
@@ -79,6 +99,26 @@ export const DestinationForm = ({ initialData = null }) => {
             setIsEditing(false);
         }
     };
+
+    const deleteImageHandler = async (index) => {
+        const imageToDelete = uploadedImages[index];
+
+        try {
+            setIsEditing(true);
+            // Call the deleteImage function
+            await firebaseDeleteImageHandler(imageToDelete);
+
+            // Update local state to remove the image
+            const newImages = uploadedImages.filter((_, i) => i !== index);
+            setUploadedImages(newImages);
+            setValue("images", newImages);
+            toast.success("Image deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete image");
+        }
+        setIsEditing(false);
+    };
+
 
     return (
         <Form {...form}>
@@ -233,8 +273,9 @@ export const DestinationForm = ({ initialData = null }) => {
                     </div>
                 )}
 
-                <Button type="submit" className="w-full">
-                    {initialData ? 'Update Destination' : 'Create Destination'}
+                <Button type="submit" className="w-full flex items-center">
+                    {loading ? <Spinner /> :
+                        initialData ? 'Update Destination' : 'Create Destination'}
                 </Button>
             </form>
         </Form>

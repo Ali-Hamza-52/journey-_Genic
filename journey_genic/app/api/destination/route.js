@@ -7,6 +7,7 @@ export async function GET() {
     await databaseConnection();
     // Your code here get all destinations
     const destinations = await Destination.find({});
+    console.log("objects:", destinations)
     if (!destinations) {
       return NextResponse.json({
         status: 404,

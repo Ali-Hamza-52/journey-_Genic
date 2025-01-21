@@ -7,7 +7,7 @@ const uploadImage = async (file) => {
     throw new Error('No file provided');
   }
 
-  const storageRef = ref(imageConfig, `${v4()}`);
+  const storageRef = ref(imageConfig, `journey-genic/${v4()}`);
   const uploadTask = uploadBytesResumable(storageRef, file);
 
   return new Promise((resolve, reject) => {
