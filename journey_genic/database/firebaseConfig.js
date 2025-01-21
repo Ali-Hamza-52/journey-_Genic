@@ -10,6 +10,15 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// const firebaseConfig = {
+  
+  // apiKey: "AIzaSyCYhZHGYB5OvVnQujnMrQi3jr9f8MKDKhw",
+  // authDomain: "final-year-df64c.firebaseapp.com",
+  // projectId: "final-year-df64c",
+  // storageBucket: "final-year-df64c.firebasestorage.app",
+  // messagingSenderId: "112633634526",
+  // appId: "1:112633634526:web:bfe30144750a997cf9ac4f"
+// };
 const app = initializeApp(firebaseConfig);
 
 const imageConfig = getStorage(app);
