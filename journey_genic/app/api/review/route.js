@@ -50,7 +50,6 @@ export async function POST(req) {
             data: newReview,
         });
     } catch (error) {
-        console.error(error);
         return NextResponse.json({
             status: 500,
             message: "Server error",

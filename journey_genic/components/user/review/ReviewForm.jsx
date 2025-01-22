@@ -12,18 +12,14 @@ import {
 } from "@/components/ui/accordion";
 import { Typography } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
-import { ReviewFormValues } from "@/helpers/types/review";
 import reviewSchema from "@/helpers/schemas/review";
-import { useAppSelector } from "@/lib/store/hooks/hooks";
-import { selectUserId } from "@/lib/store/features/user/selectors";
 import axiosInstance from "@/lib/axiosInstance";
-import useToast from "@/hooks/useToast";
+import { toast } from "sonner";
 
 const ReviewForm = ({ id }) => {
-  const user_id = useAppSelector(selectUserId);
+  const user_id = localStorage.getItem("travelingUserId");
   console.log("this is user id", user_id);
   const [rating, setRating] = useState(0);
-  const toast = useToast();
   const {
     register,
     handleSubmit,
@@ -36,7 +32,7 @@ const ReviewForm = ({ id }) => {
       rating: 0,
       comment: "",
       productId: id,
-      userId: user_id || "674c01a0c444f6bd89c40042",
+      userId: user_id,
     },
   });
 
@@ -50,15 +46,15 @@ const ReviewForm = ({ id }) => {
     try {
       const response = await axiosInstance.post("/review", data);
       if (response.status === 200) {
-        toast.showSuccess("Review submitted successfully!");
+        toast.success("Review submitted successfully!");
         window.location.reload();
       } else {
-        toast.showError("Failed to submit review. Please try again.");
+        toast.error("Failed to submit review. Please try again.");
       }
       // Reset the form after a successful submission
       reset();
     } catch (error) {
-      toast.showError("Failed to submit review. Please try again.");
+      toast.error("Failed to submit review. Please try again.");
     }
   };
 

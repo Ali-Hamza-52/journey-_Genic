@@ -21,15 +21,15 @@ const SocialShareItems = () => {
 
   return (
     <>
-      <Typography variant="h4">Share</Typography>
-      <div className="flex gap-3">
+      <Typography weight="semiBold" variant="h5">Share</Typography>
+      <div className="flex gap-3 mt-2">
         {url && ( // Render components only when the URL is available
           <>
-            <FacebookShare url={url} />
-            <WhatsappShare url={url} />
-            <LinkedinShare url={url} />
-            <TwitterShare url={url} />
-            <EmailShare url={url} />
+            <FacebookShare url={url} size={40}/>
+            <WhatsappShare url={url} size={40}/>
+            <LinkedinShare url={url} size={40}/>
+            <TwitterShare url={url} size={40}/>
+            <EmailShare url={url} size={40}/>
           </>
         )}
       </div>

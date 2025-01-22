@@ -38,6 +38,7 @@ export async function GET(request, { params }){
                 message: 'offer not found'
             });
         }
+        console.log("offer found", offer);
         return NextResponse.json({
             status: 200,
             data: offer

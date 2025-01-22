@@ -124,6 +124,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/destinations', label: 'Destinations' },
   { href: '/trips', label: 'Trips' },
+  { href: '/offers', label: 'Offers' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/chat', label: 'Chat' },
   { href: '/contact', label: 'Contact' },

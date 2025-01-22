@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '@/lib/axiosInstance';
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import Reviews from '../review/Reviews';
+import SocialShareItems from '@/components/common/SocialShareItems';
 
 const DestinationDetail = ({id}) => {
   const [destination, setDestination] = useState(null);
@@ -114,6 +116,7 @@ const DestinationDetail = ({id}) => {
                       </div>
                     </div>
                   </div>
+                  <SocialShareItems/>
                 </div>
 
                 <div>
@@ -128,7 +131,7 @@ const DestinationDetail = ({id}) => {
                   </ul>
                   <div className="mt-8 p-4 bg-primary/10 rounded-lg">
                     <p className="text-2xl font-bold text-primary">
-                      ${destination.price.toLocaleString()}
+                      RS. {destination.price.toLocaleString()}
                     </p>
                     <p className="text-sm text-gray-600">Starting price</p>
                   </div>

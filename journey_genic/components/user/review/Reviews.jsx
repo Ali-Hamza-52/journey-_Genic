@@ -2,36 +2,14 @@
 
 import React, { useEffect } from "react";
 import StarRating from "@/components/common/StarRating";
-import ReviewBar from "@/components/pages/user/review/ReviewBar";
-import UserReviewCard, {
-  IReview,
-} from "@/components/pages/user/review/UserReviewCard";
-import ReviewForm from "@/components/pages/user/review/ReviewForm";
-import MediumSectionWrapper from "@/components/common/MediumSectionWrapper";
+import ReviewBar from "./ReviewBar";
+import ReviewForm from "./ReviewForm";
 import { Typography } from "@/components/ui/typography";
-import { useAppDispatch, useAppSelector } from "@/lib/store/hooks/hooks";
-import { fetchProductReviews } from "@/lib/store/features/product/thunk";
-import {
-  selectIsReviewError,
-  selectIsReviewLoading,
-  selectReviews,
-  SelectIsReviewSuccess,
-  selectRating,
-} from "@/lib/store/features/product/selectors";
 
 const Reviews = ({ id }) => {
-  const dispatch = useAppDispatch();
-  const isReviewLoading = useAppSelector(selectIsReviewLoading);
-  const isReviewError = useAppSelector(selectIsReviewError);
-  const reviews = useAppSelector(selectReviews);
-  const isReviewSuccess = useAppSelector(SelectIsReviewSuccess);
-  const avgRating = useAppSelector(selectRating);
-  console.log("is review success", isReviewSuccess);
-
-  useEffect(() => {
-    dispatch(fetchProductReviews(id));
-  }, [dispatch, id]);
-
+  const [reviews, setReviews] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const avgRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   const calculateReviewData = (reviews) => {
     const ratingCount = {
       1: 0,
@@ -68,7 +46,7 @@ const Reviews = ({ id }) => {
   const reviewData = calculateReviewData(sanitizedReviews);
 
   return (
-    <MediumSectionWrapper>
+    <div className="max-w-7xl mx-auto">
       <Typography variant="h4" weight="semiBold" className="mb-4">
         Customer Reviews
       </Typography>
@@ -97,7 +75,7 @@ const Reviews = ({ id }) => {
         <ReviewForm id={id}/>
       </div>
       <div className="max-h-96 overflow-auto p-2 scroll-smooth showScrollbar">
-        {isReviewSuccess ? (
+        {loading ? (
           sanitizedReviews.map((review, index) => (
             <UserReviewCard key={index} {...review} />
           ))
@@ -112,7 +90,7 @@ const Reviews = ({ id }) => {
           </Typography>
         )}
       </div>
-    </MediumSectionWrapper>
+    </div>
   );
 };
 
