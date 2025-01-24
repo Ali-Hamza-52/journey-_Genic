@@ -1,3 +1,221 @@
+// 'use client';
+
+// import React, { useState, useEffect } from 'react';
+// import axiosInstance from '@/lib/axiosInstance';
+// import { Card, CardContent } from "@/components/ui/card";
+// import { Badge } from "@/components/ui/badge";
+// import { Button } from "@/components/ui/button";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import {
+//     AlertCircle,
+//     Calendar,
+//     Users,
+//     Check,
+//     MapPin,
+//     Clock,
+//     DollarSign
+// } from 'lucide-react';
+// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+// import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+// import { toast } from 'sonner';
+// import { formatDistance, format } from 'date-fns';
+// import { useRouter } from 'next/navigation';
+// import Reviews from '../review/Reviews';
+// import Cookies from 'js-cookie';
+
+// const OfferDetail = ({ id }) => {
+//     const router = useRouter();
+//     const [offer, setOffer] = useState();
+//     const [bookingModalOpen, setBookingModalOpen] = useState(false);
+//     const [isBooking, setIsBooking] = useState(false);
+//     const userId = localStorage.getItem('travelingUserId').replace(/^"|"$/g, '');
+
+//     const [isLoading, setIsLoading] = useState(true);
+
+//     useEffect(() => {
+//         const fetchOffer = async () => {
+//             try {
+//                 setIsLoading(true);
+//                 const response = await axiosInstance.get(`/offer/${id}`);
+//                 console.log('API Response:', response.data);
+//                 setOffer(response.data);
+//             } catch (err) {
+//                 console.error('Failed to fetch offer:', err);
+//             } finally {
+//                 setIsLoading(false);
+//             }
+//         };
+//         if (id) fetchOffer();
+//     }, [id]);
+
+//     const handleBookNow = () => {
+//         // if (!user) {
+//         //     router.push('/login');
+//         // }
+//         setBookingModalOpen(true);
+//     };
+
+//     const handleConfirmBooking = async () => {
+//         console.log("object is ready", userId ,offer.price - offer.discount , offer._id)
+
+//         // setIsBooking(true);
+//         // try {
+//         //     // await axiosInstance.post(`/offer/${offer.id}/book`, {
+//         //     //     userId: user._id,
+//         //     //     offerPrice: offer.price - offer.discount
+//         //     // });
+
+//         //     toast({
+//         //         title: "Booking Successful!",
+//         //         description: "Your tour has been booked successfully.",
+//         //     });
+//         //     setBookingModalOpen(false);
+//         // } catch (err) {
+//         //     toast({
+//         //         variant: "destructive",
+//         //         title: "Booking Failed",
+//         //         description: err.message || "Failed to book the tour. Please try again.",
+//         //     });
+//         // } finally {
+//         //     setIsBooking(false);
+//         // }
+//     };
+
+//     const validUntil = offer ? new Date(offer.validUntil) : null;
+//     const timeLeft = validUntil ? formatDistance(validUntil, new Date(), { addSuffix: true }) : '';
+
+//     if (isLoading) {
+//         return (
+//             <div className="flex justify-center items-center h-screen">
+//                 <Skeleton width="300px" height="200px" />
+//             </div>
+//         );
+//     }
+//     return (
+//         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
+//             <div className="max-w-6xl mx-auto">
+//                 {/* Image Carousel */}
+//                 <div className="mb-8">
+//                     <Carousel className="w-full">
+//                         <CarouselContent>
+//                             {offer.images.map((image, index) => (
+//                                 <CarouselItem key={index}>
+//                                     <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
+//                                         <img
+//                                             src={image}
+//                                             alt={`${offer.name} view ${index + 1}`}
+//                                             className="w-full h-full object-cover"
+//                                         />
+//                                     </div>
+//                                 </CarouselItem>
+//                             ))}
+//                         </CarouselContent>
+//                         <CarouselPrevious className="left-4" />
+//                         <CarouselNext className="right-4" />
+//                     </Carousel>
+//                 </div>
+
+//                 {/* Offer Details */}
+//                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+//                     <div className="md:col-span-2 space-y-6">
+//                         <h1 className="text-3xl md:text-4xl font-bold">{offer.name}</h1>
+//                         <div className="flex items-center text-gray-600">
+//                             <MapPin className="w-5 h-5 mr-2" />
+//                             <span>{offer.city}, {offer.country}</span>
+//                         </div>
+//                         <p className="text-gray-600">{offer.description}</p>
+//                     </div>
+
+//                     {/* Booking Card */}
+//                     <div className="md:col-span-1">
+//                         <Card className="sticky top-8">
+//                             <CardContent className="p-6 space-y-6">
+//                                 <div className="space-y-2">
+//                                     <div className="flex items-center justify-between">
+//                                         <span className="text-gray-600">Original Price</span>
+//                                         <span className="text-lg text-gray-500 line-through">
+//                                             RS. {offer.price.toLocaleString()}
+//                                         </span>
+//                                     </div>
+//                                     <div className="flex items-center justify-between">
+//                                         <span className="text-gray-600">Discount</span>
+//                                         <span className="text-lg text-red-500">
+//                                             -RS. {offer.discount.toLocaleString()}
+//                                         </span>
+//                                     </div>
+//                                     <div className="flex items-center justify-between pt-2 border-t">
+//                                         <span className="font-semibold">Final Price</span>
+//                                         <span className="text-2xl font-bold">
+//                                             RS. {(offer.price - offer.discount).toLocaleString()}
+//                                         </span>
+//                                     </div>
+//                                 </div>
+//                                 <Button className="w-full" size="lg" onClick={handleBookNow}>
+//                                     Book Now
+//                                 </Button>
+//                             </CardContent>
+//                         </Card>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {/* Booking Confirmation Modal */}
+//             <Dialog open={bookingModalOpen} onOpenChange={setBookingModalOpen}>
+//                 <DialogContent>
+//                     <DialogHeader>
+//                         <DialogTitle>Confirm Booking</DialogTitle>
+//                         <DialogDescription>
+//                             Please review your booking details before confirming.
+//                         </DialogDescription>
+//                     </DialogHeader>
+
+//                     <div className="space-y-4">
+//                         <div className="space-y-2">
+//                             <h3 className="font-semibold">{offer.name}</h3>
+//                             <p className="text-sm text-gray-500">{offer.city}, {offer.country}</p>
+//                         </div>
+
+//                         <div className="space-y-2 text-sm">
+//                             <div className="flex justify-between">
+//                                 <span>Original Price:</span>
+//                                 <span>${offer.price.toLocaleString()}</span>
+//                             </div>
+//                             <div className="flex justify-between text-red-500">
+//                                 <span>Discount:</span>
+//                                 <span>-${offer.discount.toLocaleString()}</span>
+//                             </div>
+//                             <div className="flex justify-between font-semibold pt-2 border-t">
+//                                 <span>Total Price:</span>
+//                                 <span>${(offer.price - offer.discount).toLocaleString()}</span>
+//                             </div>
+//                         </div>
+//                     </div>
+
+//                     <DialogFooter>
+//                         <Button
+//                             variant="outline"
+//                             onClick={() => setBookingModalOpen(false)}
+//                             disabled={isBooking}
+//                         >
+//                             Cancel
+//                         </Button>
+//                         <Button
+//                             onClick={handleConfirmBooking}
+//                             disabled={isBooking}
+//                         >
+//                             {isBooking ? 'Booking...' : 'Confirm Booking'}
+//                         </Button>
+//                     </DialogFooter>
+//                 </DialogContent>
+//             </Dialog>
+//         </div>
+//     );
+// };
+
+// export default OfferDetail;
+
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -19,24 +237,24 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from 'sonner';
-import { formatDistance, format } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import Reviews from '../review/Reviews';
+import Cookies from 'js-cookie';
 
 const OfferDetail = ({ id }) => {
     const router = useRouter();
-    const [offer, setOffer] = useState();
+    const [offer, setOffer] = useState(null);
     const [bookingModalOpen, setBookingModalOpen] = useState(false);
     const [isBooking, setIsBooking] = useState(false);
-    const [user, setUser] = useState(null);
+    const [numSeats, setNumSeats] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const userId = localStorage.getItem('travelingUserId')?.replace(/^"|"$/g, '');
 
     useEffect(() => {
         const fetchOffer = async () => {
             try {
                 setIsLoading(true);
                 const response = await axiosInstance.get(`/offer/${id}`);
-                console.log('API Response:', response.data);
                 setOffer(response.data);
             } catch (err) {
                 console.error('Failed to fetch offer:', err);
@@ -47,53 +265,28 @@ const OfferDetail = ({ id }) => {
         if (id) fetchOffer();
     }, [id]);
 
-
-    useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            try {
-                setUser(JSON.parse(userData));
-            } catch (err) {
-                console.error('Failed to parse user data:', err);
-            }
-        }
-    }, []);
-
     const handleBookNow = () => {
-        // if (!user) {
-        //     router.push('/login');
-        // }
         setBookingModalOpen(true);
     };
 
     const handleConfirmBooking = async () => {
-        if (!user) return;
-
+        console.log("Booking details", { userId, totalCost: (offer.price - offer.discount) * numSeats, numSeats, offerId: offer._id });
+        
         setIsBooking(true);
         try {
-            await axiosInstance.post(`/offer/${offer.id}/book`, {
-                userId: user._id,
-                offerPrice: offer.price - offer.discount
+            await axiosInstance.post(`/offer/${offer._id}/book`, {
+                userId,
+                offerPrice: (offer.price - offer.discount) * numSeats,
+                numSeats
             });
-
-            toast({
-                title: "Booking Successful!",
-                description: "Your tour has been booked successfully.",
-            });
+            toast.success("Booking Successful! Your tour has been booked.");
             setBookingModalOpen(false);
         } catch (err) {
-            toast({
-                variant: "destructive",
-                title: "Booking Failed",
-                description: err.message || "Failed to book the tour. Please try again.",
-            });
+            toast.error("Booking Failed: " + (err.response?.data?.message || "Please try again."));
         } finally {
             setIsBooking(false);
         }
     };
-
-    const validUntil = offer ? new Date(offer.validUntil) : null;
-    const timeLeft = validUntil ? formatDistance(validUntil, new Date(), { addSuffix: true }) : '';
 
     if (isLoading) {
         return (
@@ -102,21 +295,17 @@ const OfferDetail = ({ id }) => {
             </div>
         );
     }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
             <div className="max-w-6xl mx-auto">
-                {/* Image Carousel */}
                 <div className="mb-8">
                     <Carousel className="w-full">
                         <CarouselContent>
-                            {offer.images.map((image, index) => (
+                            {offer.images?.map((image, index) => (
                                 <CarouselItem key={index}>
                                     <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
-                                        <img
-                                            src={image}
-                                            alt={`${offer.name} view ${index + 1}`}
-                                            className="w-full h-full object-cover"
-                                        />
+                                        <img src={image} alt={`${offer.name} view ${index + 1}`} className="w-full h-full object-cover" />
                                     </div>
                                 </CarouselItem>
                             ))}
@@ -126,7 +315,6 @@ const OfferDetail = ({ id }) => {
                     </Carousel>
                 </div>
 
-                {/* Offer Details */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="md:col-span-2 space-y-6">
                         <h1 className="text-3xl md:text-4xl font-bold">{offer.name}</h1>
@@ -137,47 +325,35 @@ const OfferDetail = ({ id }) => {
                         <p className="text-gray-600">{offer.description}</p>
                     </div>
 
-                    {/* Booking Card */}
                     <div className="md:col-span-1">
                         <Card className="sticky top-8">
                             <CardContent className="p-6 space-y-6">
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="text-gray-600">Original Price</span>
-                                        <span className="text-lg text-gray-500 line-through">
-                                            RS. {offer.price.toLocaleString()}
-                                        </span>
+                                        <span className="text-lg text-gray-500 line-through">RS. {offer.price.toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-gray-600">Discount</span>
-                                        <span className="text-lg text-red-500">
-                                            -RS. {offer.discount.toLocaleString()}
-                                        </span>
+                                        <span className="text-lg text-red-500">-RS. {offer.discount.toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center justify-between pt-2 border-t">
                                         <span className="font-semibold">Final Price</span>
-                                        <span className="text-2xl font-bold">
-                                            RS. {(offer.price - offer.discount).toLocaleString()}
-                                        </span>
+                                        <span className="text-2xl font-bold">RS. {(offer.price - offer.discount).toLocaleString()}</span>
                                     </div>
                                 </div>
-                                <Button className="w-full" size="lg" onClick={handleBookNow}>
-                                    Book Now
-                                </Button>
+                                <Button className="w-full" size="lg" onClick={handleBookNow}>Book Now</Button>
                             </CardContent>
                         </Card>
                     </div>
                 </div>
             </div>
 
-            {/* Booking Confirmation Modal */}
             <Dialog open={bookingModalOpen} onOpenChange={setBookingModalOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Confirm Booking</DialogTitle>
-                        <DialogDescription>
-                            Please review your booking details before confirming.
-                        </DialogDescription>
+                        <DialogDescription>Review your booking details before confirming.</DialogDescription>
                     </DialogHeader>
 
                     <div className="space-y-4">
@@ -187,39 +363,23 @@ const OfferDetail = ({ id }) => {
                         </div>
 
                         <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                                <span>Original Price:</span>
-                                <span>${offer.price.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between text-red-500">
-                                <span>Discount:</span>
-                                <span>-${offer.discount.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between font-semibold pt-2 border-t">
-                                <span>Total Price:</span>
-                                <span>${(offer.price - offer.discount).toLocaleString()}</span>
-                            </div>
+                            <label>Number of Seats:</label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={numSeats}
+                                onChange={(e) => setNumSeats(Number(e.target.value))}
+                                className="w-full p-2 border rounded"
+                            />
                         </div>
                     </div>
 
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setBookingModalOpen(false)}
-                            disabled={isBooking}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleConfirmBooking}
-                            disabled={isBooking}
-                        >
-                            {isBooking ? 'Booking...' : 'Confirm Booking'}
-                        </Button>
+                        <Button variant="outline" onClick={() => setBookingModalOpen(false)} disabled={isBooking}>Cancel</Button>
+                        <Button onClick={handleConfirmBooking} disabled={isBooking}>{isBooking ? 'Booking...' : 'Confirm Booking'}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-            <Reviews id={offer._id} />
         </div>
     );
 };
