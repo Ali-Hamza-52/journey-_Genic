@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const axiosInstance = axios.create({
+  // baseURL:process.env.API_BASE_URL,
   baseURL:"http://localhost:3000/api/",
   // baseURL:"http://192.168.185.50:3000/api",
   timeout: 20000,

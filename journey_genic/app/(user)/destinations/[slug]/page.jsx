@@ -1,8 +1,9 @@
 import DestinationDetail from '@/components/user/destination/DestinationDetail'
 import React from 'react'
 
-const page = ({params}) => {
-  return <DestinationDetail id={params.slug}/>
+const page =async ({params}) => {
+  const slug = await params.slug
+  return <DestinationDetail id={slug}/>
 }
 
 export default page

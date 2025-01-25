@@ -1,31 +1,38 @@
 import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User", // User model ka reference
-            required: true,
-        },
-        offerId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Offer",
-            required: true,
-        },
-        price: {
-            type: Number,
-            required: true,
-        },
-        seats: {
-            type: Number,
-            required: true,
-            min: 0,
-            max: 5,
-        },
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // User model ka reference
+      required: true,
     },
-    { timestamps: true }
+    offerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Offer",
+      required: true,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+    discount: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    seats: {
+      type: Number,
+      required: true,
+    },
+  },
+  { timestamps: true }
 );
 
-const Booking = mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
+const Booking =
+  mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
 
 export default Booking;

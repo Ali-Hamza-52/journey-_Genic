@@ -27,7 +27,16 @@ export async function POST(request) {
   try {
     await databaseConnection();
     const body = await request.json();
+    const { userId, totalCost, numSeats, offerId, discount, price } = body;
 
+    const bookingData = {
+      userId,
+      offerId,
+      totalPrice: totalCost, // Corresponding to totalPrice from schema
+      discount,
+      price,
+      seats: numSeats, // Corresponding to seats from schema
+    };
     console.log("i am returning", body);
     const isBookingExist = await Booking.findOne({
       offerId: body.offerId,
@@ -39,19 +48,22 @@ export async function POST(request) {
         message: "You already have a booking for this offer",
       });
     }
-    const newBooking = await Booking.create(body);
+    const newBooking = await Booking.create(bookingData);
+    console.log("object-->", newBooking);
     // update offer with new booking and remove maxBookings minus total reservation seats
     await Offer.updateOne(
       { _id: body.offerId },
-      { $inc: { maxBookings: -body.seats } }
+      { $inc: { maxBookings: -numSeats } } // Use numSeats here instead of body.seats
     );
 
     return NextResponse.json({
       status: 200,
+      newBooking,
     });
   } catch (error) {
     return NextResponse.json({
       status: 500,
+      message: error.message,
     });
   }
 }
