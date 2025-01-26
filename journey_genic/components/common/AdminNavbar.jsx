@@ -37,7 +37,7 @@ const AdminNavbar = () => {
   return (
     <>
       <div className="hidden md:flex flex-col fixed top-0 left-0 items-center w-72 min-h-screen overflow-hidden text-gray-400 bg-gray-900 ">
-        <Link className="flex items-center w-full px-4 ml-3 mt-3" href="#">
+        <Link className="flex items-center w-full px-4 ml-3 mt-3" href="/admin/dashboard">
           <svg
             className="w-8 h-8 fill-current"
             xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,7 @@ const AdminNavbar = () => {
         </Link>
       </div>
       <div className="flex md:hidden flex-col fixed top-0 left-0 items-center w-20 min-h-screen overflow-hidden text-gray-400 bg-gray-900 ">
-        <Link className="flex items-center w-full px-4 ml-3 mt-3" href="#">
+        <Link className="flex items-center w-full px-4 ml-3 mt-3" href="/admin/dashboard">
           <svg
             className="w-8 h-8 fill-current"
             xmlns="http://www.w3.org/2000/svg"

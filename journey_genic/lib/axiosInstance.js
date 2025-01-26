@@ -4,7 +4,7 @@ const axiosInstance = axios.create({
   // baseURL:process.env.API_BASE_URL,
   baseURL:"http://localhost:3000/api/",
   // baseURL:"http://192.168.185.50:3000/api",
-  timeout: 20000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
   },
@@ -22,11 +22,11 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
+    console.log("response ---->", response);
     return response.data;
   },
   (error) => {
-    // if (error.response && error.response.status === 401) {
-    // }
+    console.log("error ---->",error)
     return Promise.reject(error);
   }
 );

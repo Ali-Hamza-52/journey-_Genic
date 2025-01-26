@@ -2,11 +2,20 @@ import Booking from "@/models/book.models";
 import databaseConnection from "@/database/connectionDb";
 import { NextResponse } from "next/server";
 import Offer from "@/models/offer.models";
+import User from "@/models/user.models";
 
 export async function GET() {
   try {
     await databaseConnection();
-    const bookings = await Booking.find({});
+    const bookings = await Booking.find({}).populate({
+      path: "offerId",
+      model: Offer,
+      select: "name country city price",
+    }).populate({
+      path: "userId",
+      model: User,
+      select: "username email address phoneNumber",
+    });
     if (!bookings) {
       return NextResponse.json({
         status: 404,
