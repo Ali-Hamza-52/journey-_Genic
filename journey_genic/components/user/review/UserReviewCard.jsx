@@ -1,22 +1,21 @@
 import StarRating from "@/components/common/StarRating";
 import { Typography } from "@/components/ui/typography";
-import { selectUserId } from "@/lib/store/features/user/selectors";
-import { useAppSelector } from "@/lib/store/hooks/hooks";
 import Image from "next/image";
 import React from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 
 const UserReviewCard = ({
   _id,
-  userId: { _id: reviewUserId, username },
+  userId: { _id: reviewUserId, username , profileImage },
   comment,
   rating,
-  profileImage,
-}) => {
-  const avatarSrc = profileImage || `/svgs/icon-user-logo.svg`;
-  const loggedInUserId = useAppSelector(selectUserId); // Logged-in user ID
+}) => {  
+  const user_id = localStorage.getItem("travelingUserId").replace(/^"|"$/g, '');
+
+  const avatarSrc = profileImage || `/images/user.png`;
 
   // Handle deleting a review
   const handleDelete = async () => {
@@ -114,7 +113,7 @@ const UserReviewCard = ({
         <Typography variant="t2" className=" text-gray-600">
           {comment}
         </Typography>
-        {loggedInUserId === reviewUserId && ( // Show buttons if user owns the review
+        {user_id  === reviewUserId && (
           <div className="flex gap-2 mt-3">
             <button
               onClick={handleEdit}

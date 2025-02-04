@@ -22,6 +22,7 @@ import { toast } from 'sonner';
 import { formatDistance } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import SocialShareItems from '@/components/common/SocialShareItems';
 
 const OfferDetail = ({ id }) => {
     const router = useRouter();
@@ -68,7 +69,7 @@ const OfferDetail = ({ id }) => {
 
         setIsBooking(true);
         try {
-            const response = await axiosInstance.post(`/booking`, { userId, price:offer.price, totalCost: ((offer.price * numSeats) - (offer.discount * numSeats)), numSeats, offerId: offer._id, discount: offer.discount * numSeats });
+            const response = await axiosInstance.post(`/booking`, { userId, price: offer.price, totalCost: ((offer.price * numSeats) - (offer.discount * numSeats)), numSeats, offerId: offer._id, discount: offer.discount * numSeats });
             console.log("result: ", response);
             if (response.status === 200) {
                 toast.success("Booking Successful! Your tour has been booked.");
@@ -120,29 +121,33 @@ const OfferDetail = ({ id }) => {
                             <span>{offer.city}, {offer.country}</span>
                         </div>
                         <p className="text-gray-600">{offer.description}</p>
+                        <SocialShareItems/>
                     </div>
+                    {
+                        userId &&
 
-                    <div className="md:col-span-1">
-                        <Card className="sticky top-8">
-                            <CardContent className="p-6 space-y-6">
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-600">Original Price</span>
-                                        <span className="text-lg text-gray-500 line-through">RS. {offer.price.toLocaleString()}</span>
+                        <div className="md:col-span-1">
+                            <Card className="sticky top-8">
+                                <CardContent className="p-6 space-y-6">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-gray-600">Original Price</span>
+                                            <span className="text-lg text-gray-500 line-through">RS. {offer.price.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-gray-600">Discount</span>
+                                            <span className="text-lg text-red-500">-RS. {offer.discount.toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between pt-2 border-t">
+                                            <span className="font-semibold">Final Price</span>
+                                            <span className="text-2xl font-bold">RS. {(offer.price - offer.discount).toLocaleString()}</span>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-gray-600">Discount</span>
-                                        <span className="text-lg text-red-500">-RS. {offer.discount.toLocaleString()}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between pt-2 border-t">
-                                        <span className="font-semibold">Final Price</span>
-                                        <span className="text-2xl font-bold">RS. {(offer.price - offer.discount).toLocaleString()}</span>
-                                    </div>
-                                </div>
-                                <Button className="w-full" size="lg" onClick={handleBookNow}>Book Now</Button>
-                            </CardContent>
-                        </Card>
-                    </div>
+                                    <Button className="w-full" size="lg" onClick={handleBookNow}>Book Now</Button>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    }
                 </div>
             </div>
 

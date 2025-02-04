@@ -7,6 +7,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import axiosInstance from '@/lib/axiosInstance';
 import Link from 'next/link';
 import SectionWrapper from '@/components/common/SectionWrapper';
+import Reviews from '../review/Reviews';
+import SocialShareItems from '@/components/common/SocialShareItems';
 
 const TripDetail = ({ id }) => {
     const [trip, setTrip] = useState(null);
@@ -103,8 +105,10 @@ const TripDetail = ({ id }) => {
                             ))}
                         </div>
                     </div>
+                    <SocialShareItems/>
                 </div>
             </div>
+            <Reviews id={trip._id}/>
         </SectionWrapper>
     );
 };

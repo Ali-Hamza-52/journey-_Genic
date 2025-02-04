@@ -32,7 +32,7 @@ const ReviewForm = ({ id }) => {
       rating: 0,
       comment: "",
       productId: id,
-      userId: user_id,
+      userId: user_id.replace(/^"|"$/g, ''),
     },
   });
 
@@ -51,7 +51,6 @@ const ReviewForm = ({ id }) => {
       } else {
         toast.error("Failed to submit review. Please try again.");
       }
-      // Reset the form after a successful submission
       reset();
     } catch (error) {
       toast.error("Failed to submit review. Please try again.");

@@ -5,10 +5,30 @@ import StarRating from "@/components/common/StarRating";
 import ReviewBar from "./ReviewBar";
 import ReviewForm from "./ReviewForm";
 import { Typography } from "@/components/ui/typography";
+import axiosInstance from "@/lib/axiosInstance";
+import { Spinner } from "@/components/ui/spinner";
+import UserReviewCard from "./UserReviewCard";
 
 const Reviews = ({ id }) => {
   const [reviews, setReviews] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    try {
+      const fetchReviews = async () => {
+        const response = await axiosInstance.get(`/review/${id}`);
+        console.log("reviews",response.review)
+        setReviews(response.review);
+        console.log("reviews updated",reviews)
+
+        setLoading(false);
+      };
+      fetchReviews();
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      setLoading(false);
+    }
+  },[])
   const avgRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   const calculateReviewData = (reviews) => {
     const ratingCount = {
@@ -46,7 +66,7 @@ const Reviews = ({ id }) => {
   const reviewData = calculateReviewData(sanitizedReviews);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-5xl mt-4 mx-auto">
       <Typography variant="h4" weight="semiBold" className="mb-4">
         Customer Reviews
       </Typography>
@@ -76,13 +96,11 @@ const Reviews = ({ id }) => {
       </div>
       <div className="max-h-96 overflow-auto p-2 scroll-smooth showScrollbar">
         {loading ? (
-          sanitizedReviews.map((review, index) => (
+          <Spinner/>
+        ) : (
+          reviews.map((review, index) => (
             <UserReviewCard key={index} {...review} />
           ))
-        ) : (
-          <Typography className="text-center" weight="bold">
-            No reviews found
-          </Typography>
         )}
         {reviews === undefined && (
           <Typography className="text-center" weight="bold">
